@@ -40,7 +40,7 @@ namespace analysis
 
 class NestAnalysis
 {
- private:
+ protected:
   // Cached copy of loop nest under evaluation (used for speedup).
   loop::Nest cached_nest;
   

@@ -74,23 +74,27 @@ class Workload
   bool workload_tensor_size_set_ = false;
   bool default_dense_ = true;
   Shape shape_;
+  int wid;
 
   // For making sure only one Workload is alive at a time
-  static bool workload_alive_;
+  static int workload_alive_;
   static const Shape* current_shape_;
   friend const Shape* GetShape();
 
  public:
   Workload() {
+    // if (workload_alive_) {
+    //   throw std::runtime_error("Only one Workload instance allowed at any point.");
+    // }
     if (workload_alive_) {
-      throw std::runtime_error("Only one Workload instance allowed at any point.");
+      std::cerr << "[WARNING] There are " << workload_alive_ + 1 << " alive workloads." << std::endl;
     }
-    workload_alive_ = true;
+    wid = workload_alive_ ++;
     current_shape_ = &shape_;
   }
 
   ~Workload() {
-    workload_alive_ = false;
+    workload_alive_ --; 
     current_shape_ = nullptr;
   }
 
@@ -191,6 +195,10 @@ class Workload
   void ParseShape(config::CompoundConfigNode config)
   {
     shape_.Parse(config);
+  }
+
+  void SetShape(const Shape& shape){
+    shape_ = shape;
   }
 
  private:

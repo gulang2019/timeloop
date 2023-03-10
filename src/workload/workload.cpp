@@ -44,7 +44,7 @@ const Shape* GetShape()
 //                 Workload                 //
 // ======================================== //
 
-bool Workload::workload_alive_ = false;
+int Workload::workload_alive_ = 0;
 const Shape* Workload::current_shape_ = nullptr;
 
 std::string ShapeFileName(const std::string shape_name)
