@@ -145,9 +145,9 @@ class NestAnalysis
   void DetectImperfectFactorization();
   void InitializeNestProperties();
   void InitNumSpatialElems();
-  void InitStorageBoundaries();
+  virtual void InitStorageBoundaries();
   void InitSpatialFanouts();
-  void InitPerLevelDimScales();
+  virtual void InitPerLevelDimScales();
 
   void InitializeLiveState();
   void CollectWorkingSets();
@@ -159,7 +159,7 @@ class NestAnalysis
 
   problem::OperationSpace ComputeDeltas(std::vector<analysis::LoopState>::reverse_iterator cur);
 
-  void ComputeTemporalWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur,
+  virtual void ComputeTemporalWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur,
                                  analysis::ElementState& cur_state);
   void ComputeSpatialWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur);
 

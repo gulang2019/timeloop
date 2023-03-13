@@ -201,6 +201,10 @@ class Workload
     shape_ = shape;
   }
 
+  static void SetCurrShape(const Shape* shape){
+    current_shape_ = shape;
+  }
+
  private:
   // Serialization
   friend class boost::serialization::access;
