@@ -95,7 +95,6 @@ class Workload
 
   ~Workload() {
     workload_alive_ --; 
-    current_shape_ = nullptr;
   }
 
   const Shape* GetShape() const

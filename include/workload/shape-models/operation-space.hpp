@@ -52,7 +52,6 @@ std::ostream& operator << (std::ostream& out, const OperationPoint& p);
 // ======================================== //
 //              OperationSpace              //
 // ======================================== //
-
 class OperationSpace
 {
  private:
@@ -99,7 +98,7 @@ class OperationSpace
 
   void Reset();
 
-  // OperationSpace& operator+=(const OperationSpace& s);
+  OperationSpace& operator+=(const OperationSpace& s);
   OperationSpace& operator+=(const OperationPoint& p);
   // OperationSpace& ExtrudeAdd(const OperationSpace& s);
   OperationSpace operator-(const OperationSpace& p);

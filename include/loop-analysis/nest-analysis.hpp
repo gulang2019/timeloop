@@ -155,15 +155,15 @@ class NestAnalysis
   problem::OperationPoint IndexToOperationPoint_(const std::vector<int>& indices) const;
   bool IsLastGlobalIteration_(int level, problem::Shape::FlattenedDimensionID dim) const;
   problem::OperationSpace GetCurrentWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur);
-  problem::PerDataSpace<Point> GetCurrentTranslationVectors(std::vector<analysis::LoopState>::reverse_iterator cur);
+  virtual problem::PerDataSpace<Point> GetCurrentTranslationVectors(std::vector<analysis::LoopState>::reverse_iterator cur);
 
   problem::OperationSpace ComputeDeltas(std::vector<analysis::LoopState>::reverse_iterator cur);
 
   virtual void ComputeTemporalWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur,
                                  analysis::ElementState& cur_state);
-  void ComputeSpatialWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur);
+  virtual void ComputeSpatialWorkingSet(std::vector<analysis::LoopState>::reverse_iterator cur);
 
-  void FillSpatialDeltas(std::vector<analysis::LoopState>::reverse_iterator cur,
+  virtual void FillSpatialDeltas(std::vector<analysis::LoopState>::reverse_iterator cur,
                          std::unordered_map<std::uint64_t, problem::OperationSpace>& spatial_deltas,
                          std::unordered_map<std::uint64_t, std::uint64_t>& skew_table,
                          std::uint64_t base_index,

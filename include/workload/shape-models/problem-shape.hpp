@@ -30,6 +30,7 @@
 #include <map>
 #include <vector>
 #include <list>
+#include <iostream>
 
 #include "compound-config/compound-config.hpp"
 
@@ -93,6 +94,32 @@ class Shape
   void Parse(config::CompoundConfigNode config);
   std::set<FlattenedDimensionID> GetCoIteratedDimensions(const std::vector<DataSpaceID> dataspace_pair) const;
   std::set<FlattenedDimensionID> GetFullyContractedDimensions() const;
+  void show() const {
+    std::cout << "FactorizedDimensionIDToName:";
+    for (auto& kv: FactorizedDimensionIDToName)
+      std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+    std::cout << "FactorizedDimensionNameToID:";
+    for (auto& kv: FactorizedDimensionNameToID)
+      std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+    std::cout << "FlattenedDimensionIDToName:";
+    for (auto& kv: FlattenedDimensionIDToName)
+      std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+    std::cout << "FlattenedDimensionNameToID:";
+    for (auto& kv: FlattenedDimensionNameToID)
+      std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+    std::cout << "NumDataSpaces:" << NumDataSpaces << std::endl;
+    std::cout << "DataSpaceIDToName:";
+    for (auto& kv: DataSpaceIDToName) std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+    std::cout << "DataSpaceNameToID:";
+    for (auto& kv: DataSpaceNameToID) std::cout << kv.first << ":" << kv.second << ",";
+    std::cout << std::endl;
+
+  }
 };
 
 } // namespace problem

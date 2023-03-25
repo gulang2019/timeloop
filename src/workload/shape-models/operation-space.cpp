@@ -343,13 +343,13 @@ DataSpace& OperationSpace::GetDataSpace(Shape::DataSpaceID pv)
 }
 
 
-// OperationSpace& OperationSpace::operator += (const OperationSpace& s)
-// {
-//   for (unsigned i = 0; i < data_spaces_.size(); i++)
-//     data_spaces_.at(i) += s.data_spaces_.at(i);
+OperationSpace& OperationSpace::operator += (const OperationSpace& s)
+{
+  for (unsigned i = 0; i < data_spaces_.size(); i++)
+    data_spaces_.at(i) += s.data_spaces_.at(i);
 
-//   return (*this);
-// }
+  return (*this);
+}
 
 OperationSpace& OperationSpace::operator += (const OperationPoint& p)
 {
