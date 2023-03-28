@@ -93,6 +93,41 @@ class Workload
     current_shape_ = &shape_;
   }
 
+  void Show() const {
+    std::cout << "------------Workload------------" << std::endl;
+    shape_.show();
+    std::cout << "factorized dimensions:";
+    for (auto& kv: factorized_bounds_) {
+      std::cout << shape_.FactorizedDimensionIDToName.at(kv.first) << ":" 
+        << kv.second << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "flattened bounds:";
+    for (auto& kv: flattened_bounds_) {
+      std::cout << shape_.FlattenedDimensionIDToName.at(kv.first) << ":" 
+        << kv.second << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "coeffs:";
+    for (auto& kv: coefficients_) {
+      if (!shape_.CoefficientIDToName.count(kv.first)) {
+        assert(shape_.DefaultCoefficients.count(kv.first));
+        std::cout << kv.first << ":" << kv.second <<  ",";
+      }
+      else 
+        std::cout << shape_.CoefficientIDToName.at(kv.first) << ":" 
+        << kv.second << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "densities:";
+    for (auto& kv: densities_) {
+      std::cout << shape_.DataSpaceIDToName.at(kv.first) << ":" << kv.second 
+        << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "--------------------------------" << std::endl;
+  }
+
   ~Workload() {
     workload_alive_ --; 
   }

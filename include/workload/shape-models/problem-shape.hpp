@@ -95,6 +95,7 @@ class Shape
   std::set<FlattenedDimensionID> GetCoIteratedDimensions(const std::vector<DataSpaceID> dataspace_pair) const;
   std::set<FlattenedDimensionID> GetFullyContractedDimensions() const;
   void show() const {
+    std::cout << "-----------Shape------------" << std::endl;
     std::cout << "FactorizedDimensionIDToName:";
     for (auto& kv: FactorizedDimensionIDToName)
       std::cout << kv.first << ":" << kv.second << ",";
@@ -118,7 +119,7 @@ class Shape
     std::cout << "DataSpaceNameToID:";
     for (auto& kv: DataSpaceNameToID) std::cout << kv.first << ":" << kv.second << ",";
     std::cout << std::endl;
-
+    std::cout << "--------End Shape-----------" << std::endl;
   }
 };
 
