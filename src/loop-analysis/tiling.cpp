@@ -35,9 +35,9 @@
 namespace tiling
 {
 
-bool gEnableFirstReadElision =
-  (getenv("ENABLE_FIRST_READ_ELISION") == NULL) ||
-  (strcmp(getenv("ENABLE_FIRST_READ_ELISION"), "0") != 0);
+bool gEnableFirstReadElision = false;
+  // (getenv("ENABLE_FIRST_READ_ELISION") == NULL) ||
+  // (strcmp(getenv("ENABLE_FIRST_READ_ELISION"), "0") != 0);
 
 bool gUpdatedRMW =
   (getenv("TIMELOOP_ENABLE_UPDATED_RMW") != NULL) &&
@@ -50,13 +50,32 @@ bool operator < (const DataMovementInfo& a, const DataMovementInfo& b)
     (a.size == b.size && a.access_stats.TotalAccesses() < b.access_stats.TotalAccesses());
 }
 
-std::ostream& operator << (std::ostream& out, const DataMovementInfo& info)
-{
-  out << "size = " << info.size << " accesses = " << info.access_stats.TotalAccesses()
-      << " fanout = " << info.fanout << " repfactor = " << info.replication_factor
-      << " linkxfers = " << info.link_transfers << std::endl;
-  out << info.access_stats;
-  return out;
+// std::ostream& operator << (std::ostream& out, const DataMovementInfo& info)
+// {
+//   out << "size = " << info.size << " accesses = " << info.access_stats.TotalAccesses()
+//       << " fanout = " << info.fanout << " repfactor = " << info.replication_factor
+//       << " linkxfers = " << info.link_transfers << std::endl;
+//   out << info.access_stats;
+//   return out;
+// }
+
+std::ostream& operator << (std::ostream& o, const DataMovementInfo& info) {
+  o << std::endl << "--------DM-INFO-------" << std::endl;
+  o << "\tshape:" << info.shape << ", size" << info.size << std::endl;
+  o << "expected_data_occupancy: " << info.expected_data_occupancy << std::endl;
+  o << "reads,fill,updates:" << info.reads << "," << info.fills << "," << info.updates << std::endl;
+  o << "link_transfer,peer_accesses,peer_fills:" << info.link_transfers << "," << info.peer_accesses << "," << info.peer_fills << std::endl;
+  o << "repFactor,avgRefFactor:" << info.replication_factor << "," << info.avg_replication_factor << std::endl;
+  o << "x/y expansion:" << info.max_x_expansion << "," << info.max_y_expansion << std::endl;
+  o << "fanout,distributed_fanout" << info.fanout << "," << info.distributed_fanout << std::endl;
+  for (auto& kv: info.fine_grained_data_accesses) {
+    if (kv.second) 
+      std::cout << "data_access::" << kv.first
+         << ":" << kv.second << std::endl;
+  } 
+  o << info.access_stats;
+  o << "-----------------------" << std::endl;
+  return o;
 }
 
 } // namespace tiling

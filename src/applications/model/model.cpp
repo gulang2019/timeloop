@@ -257,7 +257,9 @@ Application::Stats Application::Run()
     {
       std::cout << "Utilization = " << std::setw(4) << OUT_FLOAT_FORMAT << std::setprecision(2) << engine.Utilization()
                  << " | pJ/Compute = " << std::setw(8) << OUT_FLOAT_FORMAT << PRINTFLOAT_PRECISION << engine.Energy() /
-      engine.GetTopology().ActualComputes() << std::endl;
+      engine.GetTopology().ActualComputes()  << std::endl;
+
+      std::cout << "Cycles: " << engine.Cycles() << ", Energy: " << engine.Energy() << std::endl;
     }
     std::ofstream map_txt_file(map_txt_file_name);
     mapping.PrettyPrint(map_txt_file, arch_specs_.topology.StorageLevelNames(), engine.GetTopology().UtilizedCapacities(), engine.GetTopology().TileSizes());

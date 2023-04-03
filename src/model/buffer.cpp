@@ -620,7 +620,6 @@ BufferLevel::Specs BufferLevel::ParseSpecs(config::CompoundConfigNode level, std
   specs.level_name = specs.name.Get();
 
   ValidateTopology(specs);
-    
   return specs;
 }
 
@@ -732,6 +731,12 @@ void BufferLevel::PopulateEnergyPerOp(unsigned num_ops){
       specs_.op_energy_map[op_name] = ert_energy_per_op;
   }
   populate_energy_per_op = true;
+
+  std::cout << specs_.level_name << "::PopulateEnergyPerOp" << std::endl;
+  for (auto& kv: specs_.op_energy_map) {
+    if (kv.second != 0) 
+      std::cout << kv.first << "," << kv.second << std::endl;
+  }
 
  }
 

@@ -52,9 +52,9 @@ bool gEnableLinkTransfers =
 bool gEnableToroidalLinks =
   (getenv("TIMELOOP_ENABLE_TOROIDAL_LINKS") != NULL) &&
   (strcmp(getenv("TIMELOOP_ENABLE_TOROIDAL_LINKS"), "0") != 0);
-bool gExtrapolateUniformTemporal =
-  (getenv("TIMELOOP_DISABLE_TEMPORAL_EXTRAPOLATION") == NULL) ||
-  (strcmp(getenv("TIMELOOP_DISABLE_TEMPORAL_EXTRAPOLATION"), "0") == 0);
+bool gExtrapolateUniformTemporal = false;
+  // (getenv("TIMELOOP_DISABLE_TEMPORAL_EXTRAPOLATION") == NULL) ||
+  // (strcmp(getenv("TIMELOOP_DISABLE_TEMPORAL_EXTRAPOLATION"), "0") == 0);
 bool gExtrapolateUniformSpatial =
   (getenv("TIMELOOP_DISABLE_SPATIAL_EXTRAPOLATION") == NULL) ||
   (strcmp(getenv("TIMELOOP_DISABLE_SPATIAL_EXTRAPOLATION"), "0") == 0);
@@ -662,6 +662,11 @@ problem::OperationSpace NestAnalysis::ComputeDeltas(std::vector<analysis::LoopSt
     std::cout << " " << point_set << std::endl;
   }
 
+  if (storage_boundary_level_[level]) {
+    std::cout << "last: " << cur_state.last_point_set << std::endl;
+    std::cout << "cur:" << point_set << std::endl;
+  }
+
   // Calculate delta to send up to caller.
 #define NEW_RESET_ON_STRIDE_CHANGE_APPROACH
 #ifdef NEW_RESET_ON_STRIDE_CHANGE_APPROACH
@@ -700,6 +705,9 @@ problem::OperationSpace NestAnalysis::ComputeDeltas(std::vector<analysis::LoopSt
     loop_gists_spatial_ = saved_loop_gists_spatial;
     cur_skew_descriptor_ = saved_skew_descriptor;
   }
+
+  if (storage_boundary_level_[level]) 
+    std::cout << "delta: " << delta << std::endl;
 
   return delta;
 }
@@ -943,8 +951,9 @@ void NestAnalysis::ComputeTemporalWorkingSet(std::vector<analysis::LoopState>::r
 
         cur_transform_[dim] += scale;
 
-        if (storage_boundary_level_[level-1] || master_spatial_level_[level-1])
+        if (storage_boundary_level_[level-1] || master_spatial_level_[level-1]){
           (time_stamp_.back())++;
+        }
       }
 
       cur_transform_[dim] = saved_transform;
