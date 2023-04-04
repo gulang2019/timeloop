@@ -221,7 +221,7 @@ class Topology : public Module
     }
   };
 
- protected:
+ public:
   std::vector<std::shared_ptr<Level>> levels_;
   std::map<std::string, std::shared_ptr<Network>> networks_;
 
@@ -260,7 +260,7 @@ class Topology : public Module
     }
   }
 
- protected:
+ public:
   std::shared_ptr<Level> GetLevel(unsigned level_id) const;
   std::shared_ptr<BufferLevel> GetStorageLevel(unsigned storage_level_id) const;
   std::shared_ptr<ArithmeticUnits> GetArithmeticLevel() const;
