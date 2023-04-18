@@ -31,6 +31,7 @@
 
 #include "workload/shape-models/problem-shape.hpp"
 #include "workload/workload.hpp"
+#include "common.hpp"
 
 namespace problem
 {
@@ -164,9 +165,15 @@ void ParseWorkloadInstance(config::CompoundConfigNode config, Workload& workload
 {
   // Loop bounds for each factorized problem dimension.
   Workload::FactorizedBounds factorized_bounds;
-  for (unsigned i = 0; i < GetShape()->NumFactorizedDimensions; i++)
+  for (unsigned i = 0; i < GetShape()->NumFactorizedDimensions; i++){
+    std::string _tmp;
     assert(config.lookupValue(GetShape()->FactorizedDimensionIDToName.at(i),
-                              factorized_bounds[i]));
+                              _tmp));
+    if (timeloop::macros.exists(_tmp)){
+      assert(timeloop::macros.lookupValue(_tmp, factorized_bounds[i]));
+    }
+    else factorized_bounds[i] = std::stoi(_tmp);
+  }
   workload.SetFactorizedBounds(factorized_bounds);
 
   // Translate into flattened bounds.

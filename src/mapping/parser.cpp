@@ -27,6 +27,7 @@
 
 #include <regex>
 
+#include "common.hpp"
 #include "mapping/parser.hpp"
 #include "mapping/arch-properties.hpp"
 
@@ -554,7 +555,7 @@ std::map<problem::Shape::FlattenedDimensionID, std::pair<int,int>> ParseUserFact
   {
     buffer = buffer.substr(0, buffer.find("#"));
 
-    std::regex re("([A-Za-z]+)[[:space:]]*[=]*[[:space:]]*([0-9]+)(,([0-9]+))?", std::regex::extended);
+    std::regex re("([A-Za-z]+)[[:space:]]*[=]*[[:space:]]*([A-Za-z0-9_]+)(,([0-9]+))?", std::regex::extended);
     std::smatch sm;
     std::string str = std::string(buffer);
 
@@ -573,7 +574,12 @@ std::map<problem::Shape::FlattenedDimensionID, std::pair<int,int>> ParseUserFact
         exit(1);
       }
 
-      int end = std::stoi(sm[2]);
+      int end;
+
+      if (timeloop::macros.exists(sm[2]))
+        assert(timeloop::macros.lookupValue(sm[2], end));
+      else end = std::stoi(sm[2]);
+
       if (end == 0)
       {
         std::cerr << "WARNING: Interpreting 0 to mean full problem dimension instead of residue." << std::endl;

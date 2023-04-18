@@ -27,11 +27,13 @@
 
 #include <iostream>
 #include <csignal>
+#include <fstream>
 #include <cstring>
 
 #include "applications/model/model.hpp"
 #include "compound-config/compound-config.hpp"
 #include "util/args.hpp"
+#include "common.hpp"
 
 extern bool gTerminateEval;
 
@@ -79,7 +81,23 @@ int main(int argc, char* argv[])
 
   Application application(config, output_dir);
   
-  application.Run();
+  auto stat = application.Run();
+
+  if (config->getRoot().exists("output")){
+    std::string filename;
+    config->getRoot().lookupValue("output", filename);
+    std::ofstream file;
+    size_t tmp = filename.find_last_of('.');
+    if (tmp == std::string::npos || filename.substr(tmp) != ".csv")
+        file.open(filename + ".csv");
+    else file.open(filename);
+    file << "metric,value" << std::endl;
+    file << "Cycle," << stat.cycles << std::endl;
+    file << "Energy," << stat.energy << std::endl;
+    if (timeloop::verbose_level)
+        std::cout << "[TileFlow]: result written into " << filename << std::endl;
+    file.close();
+  }
 
   return 0;
 }

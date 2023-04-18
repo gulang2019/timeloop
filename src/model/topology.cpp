@@ -34,6 +34,7 @@
 #include "model/network-factory.hpp"
 #include "sparse-analysis/sparse-analysis.hpp"
 #include "workload/workload.hpp"
+#include "common.hpp"
 
 namespace model
 {
@@ -1264,21 +1265,21 @@ std::vector<EvalStatus> Topology::Evaluate(Mapping& mapping,
   auto tiles = tiling::TransposeTiles(collapsed_tiles);
   assert(tiles.size() == NumStorageLevels());
 
-  int level = 0;
-  for (auto& tile: tiles) {
-    std::cout << "Level " << level << ":" << std::endl;
-    std::cout << "Compute-Info:" << std::endl;
-    const std::string prefix_ = "   ";
-    if (level == 0) {
-      auto & compute_info = tile.compute_info;
-      std::cout << prefix_<< "repFactor:" << compute_info.replication_factor << std::endl;
-      std::cout << prefix_<< "accesses:" << compute_info.accesses << std::endl;
-      std::cout << prefix_<< "expanison:" << compute_info.max_x_expansion 
-          << "," << compute_info.max_y_expansion << std::endl;
-    }
-    std::cout << tile.data_movement_info;
-    level ++;
-  }
+  // int level = 0;
+  // for (auto& tile: tiles) {
+  //   std::cout << "Level " << level << ":" << std::endl;
+  //   std::cout << "Compute-Info:" << std::endl;
+  //   const std::string prefix_ = "   ";
+  //   if (level == 0) {
+  //     auto & compute_info = tile.compute_info;
+  //     std::cout << prefix_<< "repFactor:" << compute_info.replication_factor << std::endl;
+  //     std::cout << prefix_<< "accesses:" << compute_info.accesses << std::endl;
+  //     std::cout << prefix_<< "expanison:" << compute_info.max_x_expansion 
+  //         << "," << compute_info.max_y_expansion << std::endl;
+  //   }
+  //   std::cout << tile.data_movement_info;
+  //   level ++;
+  // }
 
   if (!break_on_failure || success_accum)
   {
@@ -1317,9 +1318,6 @@ std::vector<EvalStatus> Topology::Evaluate(Mapping& mapping,
           GetStorageLevel(parent_level_id)->GetSpecs().name.Get();
       }
     }
-    std::cout << "S<" << storage_level_id << ">:";
-    std::cout << "mask:" << keep_masks[storage_level_id] << std::endl;
-    std::cout << "confidence_threshholds: " << mapping.confidence_thresholds.at(storage_level_id) << std::endl;
     auto s = storage_level->Evaluate(tiles[storage_level_id], keep_masks[storage_level_id],
                                      mapping.confidence_thresholds.at(storage_level_id),
                                      compute_cycles, break_on_failure);
@@ -1398,22 +1396,22 @@ std::vector<EvalStatus> Topology::Evaluate(Mapping& mapping,
     is_evaluated_ = true;
   }
 
-  std::cout << "Energy:" << std::endl;
-  std::cout << "Arithmetic:" << GetArithmeticLevel()->Energy() << std::endl;
-  for (unsigned storage_level_id = 0; storage_level_id < NumStorageLevels(); 
-    storage_level_id++) {
-      std::cout << "Storage<" << storage_level_id << ">" << std::endl
-        << *GetStorageLevel(storage_level_id); 
-  }
-  for (uint32_t connection_id = 0; connection_id < NumStorageLevels(); 
-  connection_id++)
-  {
-    auto connection = connection_map_[connection_id];
-    std::cout << "Connect<" << connection_id << ">:";
-    std::cout << "rf_net: " << connection.read_fill_network->Energy();
-    std::cout << "du_net: " << connection.drain_update_network->Energy();
-    std::cout << std::endl;
-  }
+  // std::cout << "Energy:" << std::endl;
+  // std::cout << "Arithmetic:" << GetArithmeticLevel()->Energy() << std::endl;
+  // for (unsigned storage_level_id = 0; storage_level_id < NumStorageLevels(); 
+  //   storage_level_id++) {
+  //     std::cout << "Storage<" << storage_level_id << ">" << std::endl
+  //       << *GetStorageLevel(storage_level_id); 
+  // }
+  // for (uint32_t connection_id = 0; connection_id < NumStorageLevels(); 
+  // connection_id++)
+  // {
+  //   auto connection = connection_map_[connection_id];
+  //   std::cout << "Connect<" << connection_id << ">:";
+  //   std::cout << "rf_net: " << connection.read_fill_network->Energy();
+  //   std::cout << "du_net: " << connection.drain_update_network->Energy();
+  //   std::cout << std::endl;
+  // }
 
   return eval_status;
 }
@@ -1447,6 +1445,8 @@ void Topology::ComputeStats(bool eval_success)
     std::uint64_t cycles = 0;
     for (auto level : levels_)
     {
+      if (timeloop::verbose_level)
+        level->Print(std::cout);
       cycles = std::max(cycles, level->Cycles());
     }
 

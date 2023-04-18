@@ -177,6 +177,7 @@ workload/format-models/coordinate-payload.cpp
 workload/format-models/uncompressed-bitmask.cpp
 workload/format-models/bitmask.cpp
 compound-config/compound-config.cpp
+common.cpp
 """)
 
 if GetOption('with_isl'):

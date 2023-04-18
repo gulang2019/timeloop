@@ -29,6 +29,7 @@
 
 #include "util/accelergy_interface.hpp"
 #include "util/banner.hpp"
+#include "common.hpp"
 
 #include "applications/model/model.hpp"
 
@@ -55,6 +56,13 @@ Application::Application(config::CompoundConfig* config,
   // Model application configuration.
   auto_bypass_on_failure_ = false;
   std::string semi_qualified_prefix = name;
+
+  if (rootNode.exists("macro")) {
+    timeloop::macros = rootNode.lookup("macro");
+  }
+  if (rootNode.exists("verbose")){
+    rootNode.lookupValue("verbose", timeloop::verbose_level);
+  }
 
   if (rootNode.exists("model"))
   {

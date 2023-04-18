@@ -41,6 +41,7 @@ BOOST_CLASS_EXPORT(model::BufferLevel)
 #include "util/misc.hpp"
 #include "pat/pat.hpp"
 #include "model/topology.hpp"
+#include "common.hpp"
 
 namespace model
 {
@@ -467,17 +468,27 @@ BufferLevel::Specs BufferLevel::ParseSpecs(config::CompoundConfigNode level, std
   }
 
   // MeshX.
-  unsigned long long  meshX;
-  if (buffer.lookupValue("meshX", meshX))
+  unsigned long long meshX;
   {
-    specs.meshX = (std::uint64_t) meshX;
+    std::string _tmp;
+    if (buffer.lookupValue("meshX", _tmp)) {
+      if (timeloop::macros.exists(_tmp))
+        timeloop::macros.lookupValue(_tmp, meshX);
+      meshX = std::stoi(_tmp);
+      specs.meshX = meshX;
+    }
   }
 
   // MeshY.
   unsigned long long  meshY;
-  if (buffer.lookupValue("meshY", meshY))
   {
-    specs.meshY = (std::uint64_t) meshY;
+    std::string _tmp;
+    if (buffer.lookupValue("meshY", _tmp)) {
+      if (timeloop::macros.exists(_tmp))
+        timeloop::macros.lookupValue(_tmp, meshY);
+      meshY = std::stoi(_tmp);
+      specs.meshY = meshY;
+    }
   }
 
   // Network names;
